@@ -1,0 +1,68 @@
+<div class="auth-container">
+  <h2>Initialisation du Profil Métabolique</h2>
+  <p class="subtitle">Ces informations permettent de calculer votre métabolisme de base (BMR).</p>
+
+  <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+    
+    <!-- ÂGE -->
+    <div class="form-group">
+      <label for="age">Âge (15 - 90 ans)</label>
+      <input id="age" type="number" formControlName="age" placeholder="Ex: 30" />
+      <div *ngIf="profileForm.get('age')?.touched && profileForm.get('age')?.invalid" class="error-msg">
+        <small *ngIf="profileForm.get('age')?.errors?.['required']">L'âge est obligatoire.</small>
+        <small *ngIf="profileForm.get('age')?.errors?.['min'] || profileForm.get('age')?.errors?.['max']">L'âge doit être compris entre 15 et 90 ans.</small>
+      </div>
+    </div>
+
+    <!-- SEXE BIOLOGIQUE -->
+    <div class="form-group">
+      <label>Sexe biologique</label>
+      <div class="radio-group">
+        <label><input type="radio" [value]="true" formControlName="isMale" /> Homme</label>
+        <label><input type="radio" [value]="false" formControlName="isMale" /> Femme</label>
+      </div>
+    </div>
+
+    <!-- TAILLE -->
+    <div class="form-group">
+      <label for="heightCm">Taille (100 - 250 cm)</label>
+      <input id="heightCm" type="number" formControlName="heightCm" placeholder="Ex: 175" />
+      <div *ngIf="profileForm.get('heightCm')?.touched && profileForm.get('heightCm')?.invalid" class="error-msg">
+        <small *ngIf="profileForm.get('heightCm')?.errors?.['required']">La taille est obligatoire.</small>
+        <small *ngIf="profileForm.get('heightCm')?.errors?.['min'] || profileForm.get('heightCm')?.errors?.['max']">La taille doit être comprise entre 100 et 250 cm.</small>
+      </div>
+    </div>
+
+    <!-- POIDS ACTUEL -->
+    <div class="form-group">
+      <label for="currentWeightKg">Poids actuel (40 - 250 kg)</label>
+      <input id="currentWeightKg" type="number" formControlName="currentWeightKg" placeholder="Ex: 75" />
+      <div *ngIf="profileForm.get('currentWeightKg')?.touched && profileForm.get('currentWeightKg')?.invalid" class="error-msg">
+        <small *ngIf="profileForm.get('currentWeightKg')?.errors?.['required']">Le poids est obligatoire.</small>
+        <small *ngIf="profileForm.get('currentWeightKg')?.errors?.['min'] || profileForm.get('currentWeightKg')?.errors?.['max']">Le poids doit être compris entre 40 et 250 kg.</small>
+      </div>
+    </div>
+
+    <!-- FACTEUR D'ACTIVITÉ -->
+    <div class="form-group">
+      <label for="activityFactor">Facteur d'activité (1.2 - 2.5)</label>
+      <select id="activityFactor" formControlName="activityFactor">
+        <option [value]="1.2">Sédentaire (1.2)</option>
+        <option [value]="1.375">Légèrement actif (1.375)</option>
+        <option [value]="1.55">Modérément actif (1.55)</option>
+        <option [value]="1.725">Très actif (1.725)</option>
+        <option [value]="1.9">Extrêmement actif (1.9)</option>
+      </select>
+    </div>
+
+    <!-- ALERTES SERVEUR -->
+    <div *ngIf="errorMessage" class="server-error">{{ errorMessage }}</div>
+    <div *ngIf="successMessage" class="server-success">{{ successMessage }}</div>
+
+    <!-- BOUTON VALIDATION -->
+    <button type="submit" [disabled]="profileForm.invalid || isSubmitting">
+      {{ isSubmitting ? 'Enregistrement...' : 'Valider mon profil' }}
+    </button>
+  </form>
+</div>
+

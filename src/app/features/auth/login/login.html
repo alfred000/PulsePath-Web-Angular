@@ -1,0 +1,34 @@
+<div class="auth-container">
+  <h2>Connexion PulsePath</h2>
+  
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="email">Adresse Email</label>
+      <input id="email" type="email" formControlName="email" placeholder="exemple@pulsepath.com" />
+      <div *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.invalid" class="error-msg">
+        <small *ngIf="loginForm.get('email')?.errors?.['required']">L'email est obligatoire.</small>
+        <small *ngIf="loginForm.get('email')?.errors?.['email']">Format d'email invalide.</small>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="password">Mot de passe</label>
+      <input id="password" type="password" formControlName="password" placeholder="••••••••" />
+      <div *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid" class="error-msg">
+        <small *ngIf="loginForm.get('password')?.errors?.['required']">Le mot de passe est obligatoire.</small>
+        <small *ngIf="loginForm.get('password')?.errors?.['minlength']">Minimum 6 caractères.</small>
+      </div>
+    </div>
+
+    <div *ngIf="errorMessage" class="server-error">
+      {{ errorMessage }}
+    </div>
+
+    <button type="submit" [disabled]="loginForm.invalid || isSubmitting">
+      {{ isSubmitting ? 'Connexion...' : 'Se connecter' }}
+    </button>
+  </form>
+
+  <p>Pas encore de compte ? <a routerLink="/register">Créez-en un ici</a></p>
+</div>
+

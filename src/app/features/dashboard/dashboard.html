@@ -1,0 +1,92 @@
+<div class="app-container">
+  <header>
+    <h1>🚀 PulsePath Engine — Tableau de Bord</h1>
+    <p>Système expert d'aide à la décision métabolique</p>
+  </header>
+
+  <main class="main-content">
+    <!-- ZONE 1 : FORMULAIRE DE JOURNALISATION -->
+    <section class="card form-section">
+      <h2>📝 Journalisation Quotidienne</h2>
+      <form (ngSubmit)="onSaveLog()">
+        <div class="form-group">
+          <label>Poids du jour (kg)</label>
+          <input type="number" step="0.1" [(ngModel)]="formLog.weight" name="weight" required />
+        </div>
+        <div class="form-group">
+          <label>Calories consommées (kcal)</label>
+          <input type="number" [(ngModel)]="formLog.caloriesIn" name="caloriesIn" required />
+        </div>
+        <div class="form-group">
+          <label>Nombre de pas</label>
+          <input type="number" [(ngModel)]="formLog.steps" name="steps" required />
+        </div>
+        <div class="form-group">
+          <label>Heures de sommeil</label>
+          <input type="number" step="0.5" [(ngModel)]="formLog.sleepHours" name="sleepHours" required />
+        </div>
+        <div class="form-group">
+          <label>Protéines consommées (g)</label>
+          <input type="number" [(ngModel)]="formLog.proteinsIn" name="proteinsIn" required />
+        </div>
+        <div class="form-group">
+          <label>Séance de sport validée ?</label>
+          <select [(ngModel)]="formLog.workoutsDone" name="workoutsDone">
+            <option [ngValue]="1">Oui (1 séance)</option>
+            <option [ngValue]="0">Non (0)</option>
+          </select>
+        </div>
+        <div class="form-group checkbox-group">
+          <input type="checkbox" [(ngModel)]="formLog.fastingValidated" name="fastingValidated" id="fasting" />
+          <label for="fasting">Objectif de jeûne intermittent atteint</label>
+        </div>
+        <button type="submit" class="btn-submit">Calculer et Analyser</button>
+      </form>
+    </section>
+
+    <!-- ZONE 2 : RESTITUTION DU DASHBOARD À 3 BLOCS -->
+    <section class="results-section" *ngIf="dashboard">
+      
+      <!-- BLOC 1 : STATISTIQUES ET KPIS -->
+      <div class="card bloc-kpi">
+        <h3>📊 [BLOC 1] DASHBOARD DU JOUR</h3>
+        <div class="grid-kpi">
+          <div class="kpi-box"><strong>Jours écoulés :</strong> {{ dashboard.joursEcoules }} jours</div>
+          <div class="kpi-box"><strong>Perte Totale :</strong> {{ dashboard.perteTotaleKg | number:'1.1-1' }} kg</div>
+          <div class="kpi-box"><strong>Progrès :</strong> {{ dashboard.progresPourcent | number:'1.0-0' }}%</div>
+          <div class="kpi-box"><strong>TDEE :</strong> {{ dashboard.tdeeDuJour | number:'1.0-0' }} kcal</div>
+          <div class="kpi-box"><strong>Activité :</strong> +{{ dashboard.caloriesBruleesActivite | number:'1.0-0' }} kcal</div>
+        </div>
+        <p class="deadline">
+          ⏱️ <strong>Échéance révisée :</strong> 
+          {{ dashboard.dateEstimee ? (dashboard.dateEstimee | date:'dd/MM/yyyy') : 'Échéance gelée' }}
+        </p>
+      </div>
+
+      <!-- BLOC 2 : RECOMMANDATION PRESCRIPTIVE -->
+      <div class="card bloc-prescription" [class.alert-mode]="dashboard.planCorrection">
+        <h3>🔴 [BLOC 2] RECOMMANDATION PRESCRIPTIVE</h3>
+        <div *ngIf="dashboard.planCorrection; else noCorrection">
+          <p class="msg-alert">{{ dashboard.planCorrection.message }}</p>
+          <ul>
+            <li>🍏 <strong>Cible Calories (7j) :</strong> {{ dashboard.planCorrection.cibleCalories }} kcal</li>
+            <li>🏃 <strong>Cible Pas (7j) :</strong> {{ dashboard.planCorrection.ciblePas }} pas</li>
+            <li>🏋️ <strong>Cardio LISS :</strong> {{ dashboard.planCorrection.cardioLISSSuggere }}</li>
+          </ul>
+        </div>
+        <ng-template #noCorrection>
+          <p class="msg-success">{{ dashboard.messagePrescriptif }}</p>
+        </ng-template>
+      </div>
+
+      <!-- BLOC 3 : INSIGHTS COMPORTEMENTAUX -->
+      <div class="card bloc-insights">
+        <h3>🍏 [BLOC 3] COACHING & INSIGHTS</h3>
+        <p><strong>Qualité de la donnée (Intégrité) :</strong> {{ dashboard.scoreIntegrite }}%</p>
+        <div class="badge" *ngIf="dashboard.scoreIntegrite === 100">🏆 Badge Intégrité Débloqué !</div>
+      </div>
+
+    </section>
+  </main>
+</div>
+
