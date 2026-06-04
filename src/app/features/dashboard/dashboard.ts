@@ -12,6 +12,8 @@ import { FormsModule } from '@angular/forms';
 export class Dashboard implements OnInit {
   // Objet d'envoi calqué sur la nomenclature anglaise de vos APIs
   formLog = {
+
+    
     weight: null,
     caloriesIn: null,
     steps: null,
