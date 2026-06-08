@@ -1,0 +1,53 @@
+.max-wide {
+  max-width: 500px;
+}
+.alert-box {
+  padding: 16px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+}
+.safety-override {
+  background-color: #fff0f1;
+  border-left: 5px solid #dc3545;
+  color: #721c24;
+}
+.safety-override h3 { margin: 0 0 8px 0; color: #bd2130; }
+
+.safety-approved {
+  background-color: #f0fff4;
+  border-left: 5px solid #28a745;
+  color: #155724;
+}
+.safety-approved h3 { margin: 0 0 8px 0; color: #1e7e34; }
+
+.metrics-summary {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.metric-card {
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
+  padding: 14px;
+  border-radius: 6px;
+  text-align: center;
+}
+.metric-card strong { display: block; font-size: 12px; text-transform: uppercase; color: #6c757d; margin-bottom: 6px; }
+.metric-card .value { font-size: 16px; font-weight: bold; color: #212529; }
+
+.actions-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.btn-secondary {
+  background: none;
+  border: 1px solid #ced4da;
+  padding: 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  color: #495057;
+}
+.btn-secondary:hover { background-color: #f8f9fa; }

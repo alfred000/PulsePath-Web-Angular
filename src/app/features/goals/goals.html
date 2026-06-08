@@ -1,0 +1,74 @@
+<div class="auth-container max-wide">
+  <h2>🎯 Planification d'Objectifs S.M.A.R.T</h2>
+  <p class="subtitle">Définissez vos cibles. Notre système expert validera la sécurité de votre stratégie de déficit.</p>
+
+  <!-- FORMULAIRE DE SAISIE INITIALE -->
+  <form [formGroup]="goalForm" (ngSubmit)="onSubmit()" *ngIf="!evaluationResult">
+    
+    <div class="form-group">
+      <label for="objective">Orientation de l'objectif</label>
+      <select id="objective" formControlName="objective">
+        <option value="perte">Perte de masse grasse (Sèche / Déficit)</option>
+        <option value="gain">Gain de masse musculaire (Prise de masse / Surplus)</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="targetWeightKg">Poids cible (40 - 250 kg)</label>
+      <input id="targetWeightKg" type="number" step="0.1" formControlName="targetWeightKg" placeholder="Ex: 70" />
+      <div *ngIf="goalForm.get('targetWeightKg')?.touched && goalForm.get('targetWeightKg')?.invalid" class="error-msg">
+        <small *ngIf="goalForm.get('targetWeightKg')?.errors?.['required']">Le poids cible est obligatoire.</small>
+        <small *ngIf="goalForm.get('targetWeightKg')?.errors?.['min'] || goalForm.get('targetWeightKg')?.errors?.['max']">Le poids doit être compris entre 40 et 250 kg.</small>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="durationWeeks">Durée estimée de la phase (1 - 52 semaines)</label>
+      <input id="durationWeeks" type="number" formControlName="durationWeeks" placeholder="Ex: 12" />
+      <div *ngIf="goalForm.get('durationWeeks')?.touched && goalForm.get('durationWeeks')?.invalid" class="error-msg">
+        <small *ngIf="goalForm.get('durationWeeks')?.errors?.['required']">La durée en semaines est requise.</small>
+        <small *ngIf="goalForm.get('durationWeeks')?.errors?.['min'] || goalForm.get('durationWeeks')?.errors?.['max']">La durée doit être comprise entre 1 et 52 semaines.</small>
+      </div>
+    </div>
+
+    <div *ngIf="errorMessage" class="server-error">{{ errorMessage }}</div>
+
+    <button type="submit" [disabled]="goalForm.invalid || isSubmitting">
+      {{ isSubmitting ? 'Analyse métabolique...' : 'Soumettre à l\'analyse expert' }}
+    </button>
+  </form>
+
+  <!-- PANNEAU DE RESTITUTION ET DE VERDICT MÉTABOLIQUE -->
+  <div class="evaluation-panel" *ngIf="evaluationResult">
+    
+    <!-- Cas A : L'objectif a été modifié par le garde-fou des 1% -->
+    <div class="alert-box safety-override" *ngIf="evaluationResult.status === 'Overridden'">
+      <h3>⚠️ Alerte de Sécurité : Objectif Réajusté</h3>
+      <p>{{ evaluationResult.warningMessage }}</p>
+    </div>
+
+    <!-- Cas B : L'objectif respecte les barrières physiologiques -->
+    <div class="alert-box safety-approved" *ngIf="evaluationResult.status === 'Approved'">
+      <h3>✅ Trajectoire Métabolique Validée</h3>
+      <p>Votre stratégie est saine et préserve l'intégrité de votre tissu musculaire.</p>
+    </div>
+
+    <!-- PARAMÈTRES PRESCRIPTIFS EXTRAITS -->
+    <div class="metrics-summary">
+      <div class="metric-card">
+        <strong>Vitesse sécurisée</strong>
+        <span class="value">{{ evaluationResult.safeWeeklyRateKg | number:'1.1-2' }} kg / semaine</span>
+      </div>
+      <div class="metric-card">
+        <strong>Ajustement budgétaire</strong>
+        <span class="value">{{ goalForm.get('objective')?.value === 'perte' ? '-' : '+' }}{{ evaluationResult.caloricDeficitTarget }} kcal / jour</span>
+      </div>
+    </div>
+
+    <div class="actions-group">
+      <button class="btn-submit" (click)="onConfirmGoal()">Appliquer et ouvrir le Tableau de Bord</button>
+      <button class="btn-secondary" (click)="evaluationResult = null">Modifier mes paramètres</button>
+    </div>
+  </div>
+</div>
+
